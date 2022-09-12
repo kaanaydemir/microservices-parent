@@ -26,6 +26,8 @@
         <module>order-service</module>
         <module>product-service</module>
         <module>service-discovery</module>
+        <module>api-gateway</module>
+        <module>notification-service</module>
     </modules>
 
 
