@@ -2,7 +2,6 @@
 ![Ideation (1)](https://user-images.githubusercontent.com/13259200/189863758-e4a01bf9-cd1f-4eae-a4e0-a386c4b28de7.png)
 
 ## Whats Including In This Repository
-We have implemented below **features over the run-aspnetcore-microservices repository**.
 
 #### Product Service microservice which includes; 
 * Spring Boot API application 
