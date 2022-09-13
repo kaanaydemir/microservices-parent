@@ -28,6 +28,7 @@
         <module>service-discovery</module>
         <module>api-gateway</module>
         <module>notification-service</module>
+        <module>cloud-config-server</module>
     </modules>
 
 
