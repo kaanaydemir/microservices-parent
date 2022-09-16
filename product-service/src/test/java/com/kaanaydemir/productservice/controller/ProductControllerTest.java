@@ -59,7 +59,8 @@ class ProductControllerTest {
 
         String content = objectMapper.writeValueAsString(productRequest);
 
-        ResultActions response = mockMvc.perform(post("/api/product/").contentType(MediaType.APPLICATION_JSON)
+        ResultActions response = mockMvc.perform(post("/api/product/")
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content(content))
                 .andExpect(status().isCreated());
 
@@ -92,4 +93,6 @@ class ProductControllerTest {
                 .andDo(print())
                 .andExpect(jsonPath("$.size()",is(productResponseList.size())));
     }
+
+
 }

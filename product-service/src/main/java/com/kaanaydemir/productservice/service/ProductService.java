@@ -26,18 +26,18 @@ public class ProductService {
                 .price (productRequest.getPrice ())
                 .build ();
 
-        Product saved = productRepository.save(product);
+        productRepository.save(product);
 
         log.info ("Product {} is saved",product.getId ());
 
-        ProductResponse productResponse = ProductResponse.builder ()
-                .id (saved.getId ())
-                .name (saved.getName ())
-                .description (saved.getDescription ())
-                .price (saved.getPrice ())
-                .build ();
+        deneme("");
+
+        ProductResponse productResponse = mapToProductResponse (product);
 
         return productResponse;
+    }
+
+    private void deneme(String d) {
     }
 
     public List<ProductResponse> getAllProducts() {
