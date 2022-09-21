@@ -1,22 +1,30 @@
 package com.kaanaydemir.productservice.service;
 
 import com.kaanaydemir.productservice.dto.ProductRequest;
+import com.kaanaydemir.productservice.dto.ProductResponse;
 import com.kaanaydemir.productservice.model.Product;
 import com.kaanaydemir.productservice.repository.ProductRepository;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Order;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.math.BigDecimal;
+import org.springframework.core.env.Environment;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.verify;
+import static org.powermock.reflect.Whitebox.invokeMethod;
 
 
-@ExtendWith(MockitoExtension.class)
-class ProductServiceTest {
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(ProductService.class)
+public class ProductServiceTest {
 
     @Mock
     ProductRepository productRepository;
@@ -25,7 +33,8 @@ class ProductServiceTest {
     ProductService productService;
 
     @Test
-    void itCanSaveProduct() {
+    @Order(1)
+    public void itCanSaveProduct() {
         ProductRequest productRequest = ProductRequest.builder()
                 .description("description")
                 .name("name")
@@ -44,11 +53,33 @@ class ProductServiceTest {
     }
 
     @Test
-    void canGetAllProducts() {
+    @Order(2)
+    public void canGetAllProducts() {
         productService.getAllProducts();
 
         verify(productRepository).findAll();
     }
+
+    @Test
+    @Order(3)
+    public void canMapToProductResponse() throws Exception {
+        Product product = Product.builder()
+                .description("description")
+                .name("name")
+                .price(BigDecimal.TEN)
+                .build();
+
+        product.setPrice(BigDecimal.valueOf(10));
+
+
+        ProductResponse response = invokeMethod(productService, "mapToProductResponse", product);
+        assertThat(response.getDescription()).isEqualTo("description");
+        assertThat(response.getName()).isEqualTo("name");
+    }
+
+
+
+
 
 
 

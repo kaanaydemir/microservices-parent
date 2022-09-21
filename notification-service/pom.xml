@@ -97,7 +97,12 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+					<image>
+						<name>kaanaydemir0/mmv2-${project.artifactId}:${project.version}</name>
+					</image>
+					<pullPolicy>IF_NOT_PRESENT</pullPolicy>
 				</configuration>
+
 			</plugin>
 			<plugin>
 				<groupId>org.apache.avro</groupId>

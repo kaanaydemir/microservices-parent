@@ -10,7 +10,9 @@ import com.kaanaydemir.orderservice.model.OrderLineItem;
 import com.kaanaydemir.orderservice.proxy.InventoryServiceProxy;
 import com.kaanaydemir.orderservice.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,11 +21,12 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrderService {
 
     private final OrderRepository orderRepository;
     private final InventoryServiceProxy inventoryServiceProxy;
-    private final KafkaProducer kafkaProducer;
+    private final KafkaTemplate<String, OrderPlacedEvent> kafkaTemplate;
 
     @Value("${kafka.topic.name}")
     private String topic;
@@ -47,11 +50,19 @@ public class OrderService {
 
         List<InventoryResponse> responses = inventoryServiceProxy.isInStock(skuCodes);
 
+        for (InventoryResponse response : responses) {
+            if (!response.isInStock()) {
+                throw new RuntimeException(response.getSkuCode() + " is not in stock");
+            }
+        }
+
         boolean allIsInStock = responses.stream()
                 .allMatch(InventoryResponse::isInStock);
 
         if (allIsInStock) {
-            kafkaProducer.send(topic,new OrderPlacedEvent(order.getOrderNumber()));
+            log.info("All items are in stock");
+            log.info("Sending order to kafka");
+            kafkaTemplate.send(topic,new OrderPlacedEvent(order.getOrderNumber()));
             orderRepository.save(order);
         } else {
             throw new IllegalArgumentException("Product is not in stock please try again later");

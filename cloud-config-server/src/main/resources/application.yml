@@ -9,4 +9,17 @@ spring:
         git:
           uri: https://github.com/kaanaydemir/config-server
           clone-on-start: true
+eureka:
+  instance:
+    hostname: config-client
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}
+application:
+  name: config-server
+  port: 8888
+  version: 1.0.0
+  description: Config Server
 

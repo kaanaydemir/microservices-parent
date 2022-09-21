@@ -30,15 +30,13 @@ public class ProductService {
 
         log.info ("Product {} is saved",product.getId ());
 
-        deneme("");
 
         ProductResponse productResponse = mapToProductResponse (product);
 
         return productResponse;
     }
 
-    private void deneme(String d) {
-    }
+
 
     public List<ProductResponse> getAllProducts() {
         List<Product> products = productRepository.findAll ();
